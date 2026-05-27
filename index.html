@@ -12,7 +12,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0a0a0a">
+    <meta name="theme-color" content="#1a1209">
     <link rel="apple-touch-icon" href="icon-192.png">
 
     <script>
@@ -27,16 +27,16 @@
     
     <style>
         :root {
-            /* The ScholarJEE Palette */
-            --bg-dark: #0a0a0a;
-            --card-dark: #141414;
-            --text-light: #f5f5f5;
-            --text-muted: #888888;
-            --accent-green: #00ff41;
-            --green-glow: rgba(0, 255, 65, 0.1);
-            
+            /* The ScholarJEE Palette — Deep Espresso & Warm Copper */
+            --bg-dark:      #1a1209;          /* Deep Espresso            */
+            --card-dark:    #2c2318;          /* Darkened Taupe           */
+            --text-light:   #f2ede6;          /* Warm Alabaster           */
+            --text-muted:   #a89880;          /* Muted Sand               */
+            --accent-green: #c8763a;          /* Brightened Copper        */
+            --green-glow:   rgba(200,118,58,0.10);
+
             --font-serif: 'Playfair Display', serif;
-            --font-sans: 'Montserrat', sans-serif;
+            --font-sans:  'Montserrat', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -46,21 +46,20 @@
             color: var(--text-light);
             font-family: var(--font-sans);
             line-height: 1.6;
-            padding-bottom: 5rem;
         }
 
-        /* Navigation Header (Exact Scholar Style, Darkened) */
+        /* ── Navigation Header ── */
         header {
-            padding: 2rem 5%;
+            padding: 1.6rem 6%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(10, 10, 10, 0.8);
+            background: rgba(26, 18, 9, 0.85);
             backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(242, 237, 230, 0.06);
         }
 
         .logo {
@@ -72,30 +71,30 @@
         }
         .logo span { color: var(--accent-green); }
 
-        nav ul { display: flex; list-style: none; gap: 2rem; }
+        nav ul { display: flex; list-style: none; gap: 2.2rem; }
         nav a {
             text-decoration: none;
             color: var(--text-muted);
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             font-weight: 500;
-            transition: 0.3s;
+            transition: color 0.3s;
         }
         nav a:hover, .active-nav { color: var(--accent-green); }
 
-        /* Page Content */
+        /* ── Page Content ── */
         .container {
             max-width: 1200px;
-            margin: 4rem auto;
-            padding: 0 5%;
+            margin: 4.5rem auto;
+            padding: 0 6%;
         }
 
         .page-intro { margin-bottom: 4rem; }
         .page-intro p {
             text-transform: uppercase;
             letter-spacing: 3px;
-            font-size: 0.75rem;
+            font-size: 0.74rem;
             color: var(--accent-green);
             font-weight: 600;
             margin-bottom: 0.5rem;
@@ -104,9 +103,10 @@
             font-family: var(--font-serif);
             font-size: 3rem;
             font-weight: 400;
+            color: var(--text-light);
         }
 
-        /* The Timer Display */
+        /* ── Timer Display ── */
         .timer-display {
             font-family: var(--font-serif);
             font-size: 3.5rem;
@@ -123,19 +123,19 @@
             margin-left: 10px;
         }
 
-        /* Resource Grid (Exact Scholar layout) */
+        /* ── Resource Grid ── */
         .resource-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2.5rem;
         }
 
-        /* Scholar Cards (Dark Mode) */
+        /* ── Scholar Cards ── */
         .resource-card {
             background: var(--card-dark);
-            padding: 3rem 2.5rem;
-            border-radius: 2px;
-            border: 1px solid rgba(255,255,255,0.05);
+            padding: 3rem 2.8rem;
+            border-radius: 16px;
+            border: 1px solid rgba(242, 237, 230, 0.06);
             transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
             display: flex;
             flex-direction: column;
@@ -144,7 +144,7 @@
 
         .resource-card:hover {
             transform: translateY(-10px);
-            border-color: rgba(0, 255, 65, 0.3);
+            border-color: rgba(200, 118, 58, 0.35);
             box-shadow: 0 20px 40px var(--green-glow);
         }
 
@@ -153,6 +153,7 @@
             font-size: 1.8rem;
             margin-bottom: 1.5rem;
             font-weight: 400;
+            color: var(--text-light);
         }
 
         .resource-info p {
@@ -162,7 +163,7 @@
             line-height: 1.8;
         }
 
-        /* The Tracker Custom UI */
+        /* ── Tracker Number ── */
         .tracker-number {
             font-family: var(--font-serif);
             font-size: 4rem;
@@ -170,7 +171,7 @@
             line-height: 1;
             margin-bottom: 1rem;
         }
-        
+
         .tracker-controls {
             display: flex;
             gap: 15px;
@@ -187,7 +188,7 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: background 0.3s;
             font-weight: 600;
         }
 
@@ -196,12 +197,12 @@
         }
 
         .revert-btn {
-            border-color: #444;
-            color: #888;
+            border-color: #5a4a38;
+            color: var(--text-muted);
         }
         .revert-btn:hover {
-            border-color: #666;
-            color: #ddd;
+            border-color: #7a6a58;
+            color: var(--text-light);
             background: transparent;
         }
 
@@ -213,50 +214,59 @@
             letter-spacing: 2px;
             font-weight: 600;
             display: inline-block;
-            transition: 0.3s;
+            transition: letter-spacing 0.3s;
         }
         .resource-link:hover { letter-spacing: 3px; }
 
+        /* ── Footer ── */
+        footer {
+            padding: 3.5rem 6% 2.5rem;
+            text-align: center;
+            border-top: 1px solid rgba(242, 237, 230, 0.06);
+            margin-top: 5rem;
+        }
+        footer p {
+            font-size: 0.78rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        footer p span { color: var(--text-muted);
+
+        /* ── Mobile ── */
         @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1.2rem 5%;
+            }
+            nav ul { gap: 1.2rem; }
+            nav a { font-size: 0.7rem; }
+
+            .container {
+                margin: 3rem auto;
+                padding: 0 5%;
+            }
+
             .page-intro h1 { font-size: 2.2rem; }
             .timer-display { font-size: 2.5rem; }
-            nav ul { gap: 1rem; }
+
+            .resource-grid { gap: 1.8rem; }
+            .resource-card { padding: 2.2rem 1.8rem; }
+
+            .layout-container {
+                flex-direction: column;
+                padding: 1.5rem;
+            }
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+            .widget-grid  { grid-template-columns: 1fr; }
+            .task-grid    { grid-template-columns: 1fr; }
+            .day-card textarea { min-height: 150px; }
         }
-        /* --- MOBILE OPTIMIZATION --- */
-@media (max-width: 768px) {
-    header {
-        flex-direction: column;
-        gap: 1rem;
-        padding: 1rem;
-    }
-    nav > ul {
-        gap: 1rem;
-    }
-    nav > ul > li > a {
-        font-size: 0.7rem;
-    }
-    .page-header h1 {
-        font-size: 2.2rem;
-    }
-    .layout-container {
-        flex-direction: column; /* Stacks sidebar on top of content */
-        padding: 1.5rem;
-    }
-    .sidebar {
-        width: 100%;
-        position: static; /* Removes the sticky effect for mobile */
-    }
-    .widget-grid {
-        grid-template-columns: 1fr; /* Single column widgets */
-    }
-    .task-grid {
-        grid-template-columns: 1fr; /* Single column cards */
-    }
-    .day-card textarea {
-        min-height: 150px;
-    }
-}
-    
     </style>
 </head>
 <body>
@@ -268,20 +278,20 @@
                 <li><a href="index.html" class="active-nav">Command</a></li>
                 <li><a href="curriculum.html">Curriculum</a></li>
                 <li><a href="debrief.html">Debrief</a></li>
-                <li><a href="telemetry.html" >Telemetry</a></li>
+                <li><a href="telemetry.html">Telemetry</a></li>
             </ul>
         </nav>
     </header>
 
     <div class="container">
         <div class="page-intro">
-            <p>Session 1 Target Lock</p>
+            <p> Target Lock</p>
             <h1>JEE Main 2027</h1>
             <div class="timer-display" id="daysCountdown">--<span>Days Remaining</span></div>
         </div>
 
         <div class="resource-grid">
-            
+
             <div class="resource-card">
                 <div class="resource-info">
                     <h3>Curriculum Status</h3>
@@ -298,38 +308,32 @@
                     <a href="vault.html" class="resource-link">Enter the Vault →</a>
                 </div>
             </div>
+
         </div>
     </div>
 
     <script>
         // --- 1. SCHOLAR DATE LOGIC (Days Remaining) ---
         function calculateDaysRemaining() {
-            // Target: Jan 24, 2027
-            const examDate = new Date('2027-01-24T00:00:00'); 
+            const examDate = new Date('2027-01-24T00:00:00');
             const now = new Date();
-
             const start = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-            const end = Date.UTC(examDate.getFullYear(), examDate.getMonth(), examDate.getDate());
-
+            const end   = Date.UTC(examDate.getFullYear(), examDate.getMonth(), examDate.getDate());
             const dayInMs = 1000 * 60 * 60 * 24;
             let daysRemaining = Math.floor((end - start) / dayInMs);
-
             if (daysRemaining < 0) daysRemaining = 0;
-
-            document.getElementById('daysCountdown').innerHTML = `${daysRemaining}<span>Days Remaining</span>`;
+            document.getElementById('daysCountdown').innerHTML =
+                `${daysRemaining}<span>Days Remaining</span>`;
         }
 
         // --- 2. DECREASING CHAPTER TRACKER LOGIC ---
         const TOTAL_CHAPTERS = 45;
 
-        // Load the remaining chapters from local storage on page load
         function loadTracker() {
-            // Get the mastered count, default to 0
             let mastered = parseInt(localStorage.getItem('jee_mastered_chapters')) || 0;
             updateUI(mastered);
         }
 
-        // Calculate how many are left and update the screen
         function updateUI(mastered) {
             let remaining = TOTAL_CHAPTERS - mastered;
             document.getElementById('chaptersLeft').innerText = remaining;
@@ -339,19 +343,19 @@
         calculateDaysRemaining();
         loadTracker();
     </script>
-    <footer style="padding: 2rem 5%; text-align: center; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 3rem;">
-            <p style="font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-green); font-weight: 500;">
-                © <span id="year"></span> Scholar. All Rights Reserved. Created by Manmath.
-            </p>
-        </footer>
-        
-        <script>
-            document.getElementById('year').textContent = new Date().getFullYear();
-            if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.ready.then(registration => {
-    registration.update(); // Checks GitHub for a new sw.js on every load
-  });
-}
-        </script>
+
+    <footer>
+          <p>© <span id="year"></span> Scholar. All Rights Reserved. Created by Manmath.</p>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.ready.then(registration => {
+                registration.update();
+            });
+        }
+    </script>
+
 </body>
 </html>
