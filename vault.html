@@ -14,28 +14,27 @@
     <meta name="theme-color" content="#0a0a0a">
     <link rel="apple-touch-icon" href="icon-192.png">
 
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('ScholarJEE Engine Online', reg.scope))
-                    .catch(err => console.error('Engine Failure', err));
-            });
-        }
-    </script>
+   <script>
+         if ('serviceWorker' in navigator) {
+             window.addEventListener('load', () => {
+                 navigator.serviceWorker.register('sw.js')
+                     .then(reg => console.log('ScholarJEE Engine Online', reg.scope))
+                     .catch(err => console.error('Engine Failure', err));
+             });
+         }
+     </script>
     <style>
         :root {
-            --bg-dark: #0a0a0a;
-            --card-dark: #141414;
-            --panel-bg: #0f0f0f;
-            --text-light: #f5f5f5;
-            --text-muted: #666666;
-            --accent-green: #00ff41;
-            --green-glow: rgba(0, 255, 65, 0.1);
-            
+            /* The ScholarJEE Palette — Deep Espresso & Warm Copper */
+            --bg-dark:      #1a1209;          /* Deep Espresso            */
+            --card-dark:    #2c2318;          /* Darkened Taupe           */
+            --text-light:   #f2ede6;          /* Warm Alabaster           */
+            --text-muted:   #a89880;          /* Muted Sand               */
+            --accent-green: #c8763a;          /* Brightened Copper        */
+            --green-glow:   rgba(200,118,58,0.10);
+
             --font-serif: 'Playfair Display', serif;
-            --font-sans: 'Montserrat', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
+            --font-sans:  'Montserrat', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -45,12 +44,11 @@
             color: var(--text-light);
             font-family: var(--font-sans);
             line-height: 1.6;
-            padding-bottom: 5rem;
         }
 
         /* Navigation Header */
         header {
-            padding: 2rem 5%;
+            padding: 1.75rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -94,7 +92,7 @@
                     position: absolute;
                     top: 2.5rem;
                     left: 5%;
-                    font-family: Spaced mono;
+                    font-family: Montserrat;
                     font-size: 0.75rem;
                     color: var(--text-muted);
                     text-transform: uppercase;
@@ -112,7 +110,7 @@
                 .page-intro { 
                     text-align: center;
                     margin-top: 3rem;
-                    margin-bottom: 4rem; 
+                    margin-bottom: 5rem; 
                 }
         
                 .page-intro .overline {
@@ -120,7 +118,7 @@
                     letter-spacing: 4px;
                     font-size: 0.7rem;
                     color: var(--text-muted);
-                    font-family: Spaced mono;
+                    font-family: Montserrat;
                     margin-bottom: 1rem;
                 }
         
@@ -144,7 +142,7 @@
         .accordion-item {
             background: var(--card-dark);
             border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 2px;
+            border-radius: 16px;
             margin-bottom: 1rem;
             overflow: hidden;
         }
@@ -159,9 +157,10 @@
             transition: 0.3s;
         }
 
-        #acc-phy { border-left-color: #00a8ff; }
-        #acc-mth { border-left-color: #e84118; }
-        #acc-chm { border-left-color: #fbc531; }
+       #acc-phy { border-left-color: #7c9eb5; }  /* Dusty Steel Blue  */
+        #acc-mth { border-left-color: #a0522d; }  /* Sienna Brown      */
+        #acc-chm { border-left-color: #b8975a; }  /* Warm Ochre        */
+
 
         .accordion-header:hover { background: #1a1a1a; }
         
@@ -199,6 +198,7 @@
             border: 1px solid rgba(255,255,255,0.03);
             font-size: 0.85rem;
             transition: 0.2s;
+            border-radius: 10px;
         }
 
         .chapter-node:hover {
@@ -216,13 +216,14 @@
             border: 1px solid #333;
             color: var(--text-muted);
             padding: 6px 10px;
-            font-family: Spaced mono;
+            font-family: Montserrat;
             font-size: 0.60rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             text-decoration: none;
             transition: 0.3s;
             font-weight: 400;
+            border-radius: 6px;
         }
 
         .btn-access:hover {
@@ -253,6 +254,7 @@
                     cursor: pointer;
                     transition: 0.3s;
                     background: transparent;
+                    border-radius: 6px;
                 }
         
                 .tick-container:hover {
@@ -292,7 +294,7 @@
                             opacity: 0.8;
                         }
     
-    /* --- MOBILE OPTIMIZATION --- */
+        /* --- MOBILE OPTIMIZATION --- */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
@@ -310,7 +312,7 @@
     }
     .layout-container {
         flex-direction: column; /* Stacks sidebar on top of content */
-        padding: 2rem;
+        padding: 1.5rem;
     }
     .sidebar {
         width: 100%;
@@ -333,18 +335,14 @@
 
     <a href="index.html" class="back-link">← COMMAND</a>
     
-        <a href="index.html" class="vault-logo">Scholar<span>JEE</span></a>
+    <a href="index.html" class="vault-logo">Scholar<span>JEE</span></a>
     
-        <div class="container">
-        
-            <div class="container">
-                <div class="page-intro">
-                    <p class="overline">Archive Management</p>
-                    <h1>The Vault</h1>
-                    <p class="description">A curated collection of past challenges and intel.</p>
-                </div>
-                
-               
+    <div class="container">
+        <div class="page-intro">
+            <p class="overline">Archive Management</p>
+            <h1>The Vault</h1>
+            <p class="description">A curated collection of past challenges and intel.</p>
+        </div>
 
         <div class="accordion-container">
                     <div class="accordion-item" id="acc-phy">
@@ -380,8 +378,9 @@
                             </div>
                     </div>
                 </div>
+        </div>
     </div>
-
+    
     <script>
         function toggleAccordion(id) {
             const body = document.getElementById(id);
@@ -508,19 +507,14 @@
         
                 renderVault();
     </script>
-    <footer style="padding: 2rem 5%; text-align: center; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 3rem;">
-            <p style="font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-green); font-weight: 500;">
+   <footer style="padding: 3.5rem 6% 2.5rem; text-align: center; border-top: 1px solid rgba(242, 237, 230, 0.06); margin-top: 1.6rem;">
+            <p style="font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); font-weight: 500;">
                 © <span id="year"></span> Scholar. All Rights Reserved. Created by Manmath.
             </p>
         </footer>
-        
+    
         <script>
             document.getElementById('year').textContent = new Date().getFullYear();
-            if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.ready.then(registration => {
-    registration.update(); // Checks GitHub for a new sw.js on every load
-  });
-}
-        </script>        
+        </script>
 </body>
 </html>
