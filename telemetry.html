@@ -5,39 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telemetry | ScholarJEE</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0a0a0a">
+    <meta name="theme-color" content="#1a1209">
     <link rel="apple-touch-icon" href="icon-192.png">
 
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('ScholarJEE Engine Online', reg.scope))
-                    .catch(err => console.error('Engine Failure', err));
-            });
-        }
-    </script>
+         if ('serviceWorker' in navigator) {
+             window.addEventListener('load', () => {
+                 navigator.serviceWorker.register('sw.js')
+                     .then(reg => console.log('ScholarJEE Engine Online', reg.scope))
+                     .catch(err => console.error('Engine Failure', err));
+             });
+         }
+     </script>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    
     <style>
         :root {
-            --bg-dark: #0a0a0a;
-            --card-dark: #141414;
-            --panel-bg: #0f0f0f;
-            --text-light: #f5f5f5;
-            --text-muted: #666666;
-            --accent-green: #00ff41;
-            --green-glow: rgba(0, 255, 65, 0.15);
-            
+             --bg-dark:      #1a1209;          /* Deep Espresso         */
+            --card-dark:    #2c2318;          /* Darkened Taupe        */
+            --panel-bg:     #211a10;          /* Darkened Taupe (panel)*/
+            --text-light:   #f2ede6;          /* Warm Alabaster        */
+            --text-muted:   #a89880;          /* Muted Sand            */
+            --accent-green: #c8763a;          /* Brightened Copper     */
+            --active-glow:  rgba(200, 118, 58, 0.4);
+            --mastered-bg:  rgba(200, 118, 58, 0.05);
+
             --font-serif: 'Playfair Display', serif;
-            --font-sans: 'Montserrat', sans-serif;
-            --font-mono: 'Space Mono', monospace;
+            --font-sans:  'Montserrat', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -47,12 +48,11 @@
             color: var(--text-light);
             font-family: var(--font-sans);
             line-height: 1.6;
-            padding-bottom: 5rem;
         }
 
         /* Navigation Header */
         header {
-            padding: 2rem 5%;
+            padding: 1.75rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -73,7 +73,7 @@
         }
         .logo span { color: var(--accent-green); }
 
-        nav ul { display: flex; list-style: none; gap: 2rem; }
+        nav ul { display: flex; list-style: none; gap: 2.5rem; }
         nav a {
             text-decoration: none;
             color: var(--text-muted);
@@ -91,7 +91,7 @@
             padding: 0 5%;
             display: grid;
             grid-template-columns: 1fr 2fr;
-            gap: 4rem;
+            gap: 3.5rem;
         }
 
         .page-intro { margin-bottom: 3rem; }
@@ -111,13 +111,14 @@
             padding: 2.5rem;
             border: 1px solid rgba(255,255,255,0.05);
             border-top: 2px solid var(--accent-green);
+            border-radius: 16px;
             position: sticky;
             top: 120px;
         }
 
         .form-label {
             display: block;
-            font-family: var(--font-mono);
+            font-family: var(--font-sans);
             font-size: 0.7rem;
             color: var(--text-muted);
             text-transform: uppercase;
@@ -129,8 +130,9 @@
             width: 100%;
             background: var(--panel-bg);
             border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
             color: var(--text-light);
-            padding: 12px 15px;
+            padding: 14px 16px;
             font-family: var(--font-sans);
             font-size: 0.9rem;
             transition: 0.3s;
@@ -144,9 +146,10 @@
             width: 100%;
             background: rgba(0, 255, 65, 0.05);
             border: 1px solid var(--accent-green);
+            border-radius: 8px;
             color: var(--accent-green);
             padding: 18px;
-            font-family: var(--font-mono);
+            font-family: var(--font-sans);
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 4px;
@@ -160,9 +163,10 @@
         /* The Chart Panel */
         .chart-container {
             background: var(--card-dark);
-            padding: 2rem;
+            padding: 2.5rem;
             border: 1px solid rgba(255,255,255,0.05);
-            margin-bottom: 2rem;
+            border-radius: 16px;
+            margin-bottom: 2.5rem;
             position: relative;
             height: 400px; /* Fixed height for Chart.js */
         }
@@ -171,14 +175,15 @@
         .analytics-bar {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
         }
 
         .stat-box {
             background: var(--panel-bg);
             border: 1px dashed rgba(255,255,255,0.1);
-            padding: 1.5rem;
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
             text-align: center;
         }
 
@@ -191,7 +196,7 @@
         }
 
         .stat-label {
-            font-family: var(--font-mono);
+            font-family: var(--font-sans);
             font-size: 0.65rem;
             color: var(--text-muted);
             text-transform: uppercase;
@@ -202,27 +207,28 @@
         .ledger-container {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
+            gap: 1.5rem;
         }
 
         .test-card {
             background: var(--panel-bg);
             border: 1px solid rgba(255,255,255,0.05);
-            padding: 1.5rem;
+            border-radius: 16px;
+            padding: 1.75rem;
             position: relative;
             transition: 0.3s;
         }
 
         .test-card:hover { border-color: rgba(255,255,255,0.2); }
 
-        .test-score { font-family: var(--font-mono); font-size: 1.5rem; color: var(--text-light); margin-bottom: 0.5rem; }
+        .test-score { font-family: var(--font-sans); font-size: 1.5rem; color: var(--text-light); margin-bottom: 0.5rem; }
         .test-name { font-size: 0.8rem; color: #aaa; margin-bottom: 0.2rem; }
-        .test-date { font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .test-date { font-family: var(--font-sans); font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
         .btn-delete {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 12px;
+            right: 12px;
             background: transparent;
             border: none;
             color: #444;
@@ -234,8 +240,7 @@
         .btn-delete:hover { color: #ff4757; }
 
         @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .chart-container { height: 300px; } }
-    
-        /* --- MOBILE OPTIMIZATION --- */
+       /* --- MOBILE OPTIMIZATION --- */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
@@ -269,7 +274,6 @@
         min-height: 150px;
     }
 }
-    
     </style>
 </head>
 <body>
@@ -361,7 +365,7 @@
             const reversedData = [...data].reverse();
             
             if (count === 0) {
-                ledger.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem; font-family: var(--font-mono); grid-column: 1/-1;">No telemetry data logged. System awaiting input.</p>';
+                ledger.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem; font-family: var(--font-sans); grid-column: 1/-1;">No telemetry data logged. System awaiting input.</p>';
             } else {
                 ledger.innerHTML = reversedData.map(d => `
                     <div class="test-card">
@@ -414,8 +418,8 @@
                         legend: { display: false },
                         tooltip: {
                             backgroundColor: '#141414',
-                            titleFont: { family: 'Space Mono', size: 12 },
-                            bodyFont: { family: 'Space Mono', size: 14 },
+                            titleFont: { family: 'Montserrat', size: 12 },
+                            bodyFont: { family: 'Montserrat', size: 14 },
                             borderColor: '#333',
                             borderWidth: 1,
                             displayColors: false
@@ -426,11 +430,11 @@
                             min: 0,
                             max: 300,
                             grid: { color: 'rgba(255, 255, 255, 0.05)' },
-                            ticks: { color: '#666', font: { family: 'Space Mono' }, stepSize: 50 }
+                            ticks: { color: '#666', font: { family: 'Montserrat' }, stepSize: 50 }
                         },
                         x: {
                             grid: { display: false },
-                            ticks: { color: '#666', font: { family: 'Space Mono', size: 10 } }
+                            ticks: { color: '#666', font: { family: 'Montserrat', size: 10 } }
                         }
                     }
                 }
@@ -468,19 +472,14 @@
         // Initialize
         loadTelemetry();
     </script>
-    <footer style="padding: 2rem 5%; text-align: center; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 3rem;">
-            <p style="font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-green); font-weight: 500;">
+    <footer style="padding: 3.5rem 6% 2.5rem; text-align: center; border-top: 1px solid rgba(242, 237, 230, 0.06); margin-top: 1.6rem;">
+            <p style="font-size: 0.78rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); font-weight: 500;">
                 © <span id="year"></span> Scholar. All Rights Reserved. Created by Manmath.
             </p>
         </footer>
-        
+    
         <script>
             document.getElementById('year').textContent = new Date().getFullYear();
-            if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.ready.then(registration => {
-    registration.update(); // Checks GitHub for a new sw.js on every load
-  });
-}
         </script>
 </body>
 </html>
