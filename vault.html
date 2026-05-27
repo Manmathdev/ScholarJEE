@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Vault | ScholarJEE</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0a0a0a">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('ScholarJEE Engine Online', reg.scope))
+                    .catch(err => console.error('Engine Failure', err));
+            });
+        }
+    </script>
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --card-dark: #141414;
+            --panel-bg: #0f0f0f;
+            --text-light: #f5f5f5;
+            --text-muted: #666666;
+            --accent-green: #00ff41;
+            --green-glow: rgba(0, 255, 65, 0.1);
+            
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            padding-bottom: 5rem;
+        }
+
+        /* Navigation Header */
+        header {
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+        .logo span { color: var(--accent-green); }
+
+        nav ul { display: flex; list-style: none; gap: 2rem; }
+        nav a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        nav a:hover, .active-nav { color: var(--accent-green); }
+
+        .container {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 5%;
+        }
+
+        /* --- The Back Link --- */
+                .back-link {
+                    position: absolute;
+                    top: 2.5rem;
+                    left: 5%;
+                    font-family: Spaced mono;
+                    font-size: 0.75rem;
+                    color: var(--text-muted);
+                    text-transform: uppercase;
+                    letter-spacing: 2px;
+                    text-decoration: none;
+                    transition: 0.3s;
+                    font-weight: 600;
+                }
+        
+                .back-link:hover {
+                    color: var(--accent-green);
+                }
+        
+                /* --- The New Centered Header --- */
+                .page-intro { 
+                    text-align: center;
+                    margin-top: 3rem;
+                    margin-bottom: 4rem; 
+                }
+        
+                .page-intro .overline {
+                    text-transform: uppercase;
+                    letter-spacing: 4px;
+                    font-size: 0.7rem;
+                    color: var(--text-muted);
+                    font-family: Spaced mono;
+                    margin-bottom: 1rem;
+                }
+        
+                .page-intro h1 {
+                    font-family: var(--font-serif);
+                    font-size: 4.5rem; /* Massive, editorial sizing */
+                    font-weight: 400;
+                    color: var(--text-light);
+                    line-height: 1.1;
+                    margin-bottom: 1rem;
+                }
+        
+                .page-intro .description {
+                    font-family: var(--font-serif);
+                    font-style: italic;
+                    font-size: 1.2rem;
+                    color: #888;
+                }
+
+        /* Vault Accordion */
+        .accordion-item {
+            background: var(--card-dark);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 2px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: 0.3s;
+        }
+
+        #acc-phy { border-left-color: #00a8ff; }
+        #acc-mth { border-left-color: #e84118; }
+        #acc-chm { border-left-color: #fbc531; }
+
+        .accordion-header:hover { background: #1a1a1a; }
+        
+        .subject-title {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+        }
+
+        .subject-count {
+            font-family: var(--font-sans); /* Keeps it clean and modern like the image */
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+            font-weight: 400;
+        }
+
+        .accordion-body {
+            display: none; /* Hidden by default */
+            background: var(--panel-bg);
+            padding: 1.5rem 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.02);
+        }
+
+        .accordion-body.open { display: grid; }
+
+        /* Chapter Card Inside Body */
+        .chapter-node {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-dark);
+            padding: 1rem;
+            border: 1px solid rgba(255,255,255,0.03);
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+
+        .chapter-node:hover {
+            border-color: var(--accent-green);
+        }
+
+        .chapter-name {
+            font-family: var(--font-sans);
+            color: #ddd;
+        }
+
+        /* Minimal Aesthetic Button */
+        .btn-access {
+            background: transparent;
+            border: 1px solid #333;
+            color: var(--text-muted);
+            padding: 6px 10px;
+            font-family: Spaced mono;
+            font-size: 0.60rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            transition: 0.3s;
+            font-weight: 400;
+        }
+
+        .btn-access:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            box-shadow: 0 0 10px var(--green-glow);
+        }
+
+        @media (max-width: 768px) {
+            .page-intro h1 { font-size: 2.5rem; }
+            .accordion-body { grid-template-columns: 1fr; }
+        }
+
+        .vault-controls {
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                }
+        
+                /* The Custom Tick Box */
+                .tick-container {
+                    width: 18px;
+                    height: 18px;
+                    border: 1px solid #333;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    transition: 0.3s;
+                    background: transparent;
+                }
+        
+                .tick-container:hover {
+                    border-color: var(--accent-green);
+                }
+        
+                .tick-container.checked {
+                    background: var(--accent-green);
+                    border-color: var(--accent-green);
+                }
+        
+                .tick-container.checked::after {
+                    content: '✓';
+                    color: #000;
+                    font-size: 12px;
+                    font-weight: 900;
+                }
+
+                /* --- The Floating Logo --- */
+                        .vault-logo {
+                            position: absolute;
+                            top: 2.2rem;
+                            right: 5%;
+                            font-family: var(--font-serif);
+                            font-size: 1.5rem;
+                            text-decoration: none;
+                            color: var(--text-light);
+                            font-weight: 600;
+                            transition: 0.3s;
+                        }
+                
+                        .vault-logo span { 
+                            color: var(--accent-green); 
+                        }
+                
+                        .vault-logo:hover {
+                            opacity: 0.8;
+                        }
+    
+    /* --- MOBILE OPTIMIZATION --- */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    nav > ul {
+        gap: 1rem;
+    }
+    nav > ul > li > a {
+        font-size: 0.7rem;
+    }
+    .page-header h1 {
+        font-size: 2.2rem;
+    }
+    .layout-container {
+        flex-direction: column; /* Stacks sidebar on top of content */
+        padding: 2rem;
+    }
+    .sidebar {
+        width: 100%;
+        position: static; /* Removes the sticky effect for mobile */
+    }
+    .widget-grid {
+        grid-template-columns: 1fr; /* Single column widgets */
+    }
+    .task-grid {
+        grid-template-columns: 1fr; /* Single column cards */
+    }
+    .day-card textarea {
+        min-height: 150px;
+    }
+}
+    
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-link">← COMMAND</a>
+    
+        <a href="index.html" class="vault-logo">Scholar<span>JEE</span></a>
+    
+        <div class="container">
+        
+            <div class="container">
+                <div class="page-intro">
+                    <p class="overline">Archive Management</p>
+                    <h1>The Vault</h1>
+                    <p class="description">A curated collection of past challenges and intel.</p>
+                </div>
+                
+               
+
+        <div class="accordion-container">
+                    <div class="accordion-item" id="acc-phy">
+                        <div class="accordion-header" onclick="toggleAccordion('body-phy')">
+                            <div class="subject-title">Physics</div>
+                            <div class="subject-count" id="count-phy">0 Completed</div>
+                        </div>
+                        <div class="accordion-body" id="body-phy"></div>
+                    </div>
+                    
+                    <div class="accordion-item" id="acc-mth">
+                        <div class="accordion-header" onclick="toggleAccordion('body-mth')">
+                            <div class="subject-title">Mathematics</div>
+                            <div class="subject-count" id="count-mth">0 Completed</div>
+                        </div>
+                        <div class="accordion-body" id="body-mth"></div>
+                    </div>
+        
+                    <div class="accordion-item" id="acc-chm">
+                        <div class="accordion-header" onclick="toggleAccordion('body-chm')">
+                            <div class="subject-title">Chemistry</div>
+                            <div class="subject-count" id="count-chm">0 Completed</div>
+                        </div>
+                        <div class="accordion-body" id="body-chm"></div>
+                    </div>
+        
+                    <div class="accordion-item" style="margin-top: 3rem; border-left: 3px solid var(--accent-green); background: rgba(0,255,65,0.02);">
+                        <div class="accordion-header" onclick="toggleAccordion('body-completed')">
+                            <div class="subject-title" style="color: var(--accent-green);">Completed Archives</div>
+                            <div class="subject-count" id="count-total-vault" style="color: var(--accent-green);">0 Completed</div>
+                        </div>
+                        <div class="accordion-body" id="body-completed">
+                            </div>
+                    </div>
+                </div>
+    </div>
+
+    <script>
+        function toggleAccordion(id) {
+            const body = document.getElementById(id);
+            body.classList.toggle('open');
+        }
+
+        const vaultData = {
+            phy: [
+                { name: 'Units & Dimensions', link: 'https://questions.examside.com/past-years/jee/question/pa-new-unit--alpha--of-length-is-chosen-such-that-it-jee-main-physics-units-and-measurements-bmoapcrwhuqsejpo' }, { name: '1D Kinematics', link: 'https://questions.examside.com/past-years/jee/question/pa-gas-balloon-is-going-up-with-a-constant-velocity-of-10-jee-main-physics-units-and-measurements-sayhty0k9nxglt9n' },
+                { name: '2D Kinematics', link: 'https://questions.examside.com/past-years/jee/question/ptwo-identical-bodies-projected-with-the-same-speed-at-tw-jee-main-physics-units-and-measurements-iaabma5f0npelftx' }, { name: 'Work, Power, Energy', link: 'https://questions.examside.com/past-years/jee/question/pa-body-of-mass-1-kg-moves-along-a-straight-line-with-a-ve-jee-main-physics-units-and-measurements-ztrbggn9hpcbcu7f' },
+                { name: 'Gravitation', link: 'https://questions.examside.com/past-years/jee/question/pa-body-of-mass-m-is-taken-from-the-surface-of-earth-to-jee-main-physics-units-and-measurements-pe8znvnji9mn1t44' }, { name: 'Electrostatics', link: 'https://questions.examside.com/past-years/jee/question/ptwo-point-charges-mathrmq13-mu-c-and-mathrmq-jee-main-physics-units-and-measurements-ybtd3enq9e77gyr2' },
+                { name: 'Capacitance', link: 'https://questions.examside.com/past-years/jee/question/pa-parallel-plate-capacitor-is-having-separation-between-p-jee-main-physics-units-and-measurements-yzjy4uc9z3ukfkya' }, { name: 'Current Electricity', link: 'https://questions.examside.com/past-years/jee/question/ptwo-cells-of-emfs-1-v-and-2-v-and-internal-resistance-2-jee-main-physics-units-and-measurements-61s5u4vzo7tropv6' },
+                { name: 'Moving Charges & Mag.', link: 'https://questions.examside.com/past-years/jee/question/pa-current-carrying-circular-loop-of-radius-2-cm-with-unit-jee-main-physics-units-and-measurements-2hi4udagi2syqzls' }, { name: 'EMI', link: 'https://questions.examside.com/past-years/jee/question/pa-30-cm-long-solenoid-has-10-turns-per-cm-and-area-of-5-jee-main-physics-units-and-measurements-wokytnw4jo86yqtw' },
+                { name: 'Alternating Current', link: 'https://questions.examside.com/past-years/jee/question/pa-lcr-series-circuit-driven-with-er-m-s90-mathrmv-jee-main-physics-units-and-measurements-qmcyrafdi9hukq2y' }, { name: 'EM Waves', link: 'https://questions.examside.com/past-years/jee/question/if-denote-microwaves-x-rays-infracted-gamma-rays-ultra-v-jee-main-physics-units-and-measurements-xhhmmui1eisfa4tb' },
+                { name: 'Ray Optics', link: 'https://questions.examside.com/past-years/jee/question/a-ray-of-light-is-incident-from-a-denser-to-a-rarer-medium-jee-main-physics-units-and-measurements-guru80vsz8uccfem' }, { name: 'Thermo & KTG', link: 'https://questions.examside.com/past-years/jee/question/pone-mole-of-diatomic-gas-having-rotational-modes-only-is-jee-main-physics-units-and-measurements-imfnmrf7mrq0knic' },
+                { name: 'Modern Physics (Atoms & Nuclei)', link: 'https://questions.examside.com/past-years/jee/question/match-list-i-experiment-performed-with-list-ii-phenom-jee-main-physics-units-and-measurements-nr9sybzsixemhpzi' }, { name: 'Semiconductors', link: 'https://questions.examside.com/past-years/jee/question/p-text--the-output--y-text--for-the-given-inputs--jee-main-physics-units-and-measurements-ejtm7pkhmxprzc16' },
+                { name: 'Modern Physics (Dual Nature)', link:'https://questions.examside.com/past-years/jee/question/pa-monochromatic-source-of-light-operating-at-15-kw-emits-jee-main-physics-units-and-measurements-h1gfkfmnnksgps36' }
+            ],
+            mth: [
+                { name: 'Relations', link: 'https://questions.examside.com/past-years/jee/question/pconsider-the-relation-r-on-the-set--2-1012-de-jee-main-mathematics-trigonometric-functions-and-equations-hucxdlrxqgivsmcr' }, { name: 'Functions', link: 'https://questions.examside.com/past-years/jee/question/plet-f-be-a-polynomial-function-such-that-log-2fx-jee-main-mathematics-trigonometric-functions-and-equations-lv7zt7iqivhi9k2d' },
+                { name: 'Matrices & Determinants', link: 'https://questions.examside.com/past-years/jee/question/pif-the-system-of-linear-equations-p-p-beginalig-jee-main-mathematics-trigonometric-functions-and-equations-ypxtw6bgkb8xgvqs' }, { name: 'Sequence & Series', link: 'https://questions.examside.com/past-years/jee/question/plet-alpha34891314ldots-upto-40-terms-if-ta-jee-main-mathematics-trigonometric-functions-and-equations-asv3s4se66mf7ucs' },
+                { name: 'Binomial Theorem', link: 'https://questions.examside.com/past-years/jee/question/pif-26leftfrac233left-12-mathrmc2righ-jee-main-mathematics-trigonometric-functions-and-equations-f8cas6u3jmwd7uq6' }, { name: 'Permutations & Comb.', link: 'https://questions.examside.com/past-years/jee/question/pa-person-has-three-different-bags-and-four-different-book-jee-main-mathematics-trigonometric-functions-and-equations-nagzuls2wepqznmh' },
+                { name: 'Straight Lines', link: 'https://questions.examside.com/past-years/jee/question/pif-a-straight-line-drawn-through-the-point-of-intersectio-jee-main-mathematics-trigonometric-functions-and-equations-vjghoha9xlfgcw02' }, { name: 'Ellipse', link: 'https://questions.examside.com/past-years/jee/question/plet-fracx2flefta27-a3rightfracy2f3-a-jee-main-mathematics-trigonometric-functions-and-equations-4b9ear1xmmbzo6a1' },
+                { name: 'Parabola', link: 'https://questions.examside.com/past-years/jee/question/plet-o-be-the-vertex-of-the-parabola-y24-x-and-its-cho-jee-main-mathematics-trigonometric-functions-and-equations-y7oappkbhc2pu6eu' }, { name: 'Hyperbola', link: 'https://questions.examside.com/past-years/jee/question/pthe-eccentricity-of-an-ellipse-e-with-centre-at-the-ori-jee-main-mathematics-trigonometric-functions-and-equations-1ngkoq4qbfljcdor' },
+                { name: 'Vectors', link: 'https://questions.examside.com/past-years/jee/question/plet-overrightarrowmathrma4-hati-hatj3-hat-jee-main-mathematics-trigonometric-functions-and-equations-zukkk4wbjhxygcdu' }, { name: '3D Geometry', link: 'https://questions.examside.com/past-years/jee/question/plet-the-foot-of-perpendicular-from-the-point-lambda-2-jee-main-mathematics-trigonometric-functions-and-equations-9muu2esmvdvs07kq' },
+                { name: 'Definite Integration', link: 'https://questions.examside.com/past-years/jee/question/pthe-value-of-the-integral-int02-fracsqrtxleftx-jee-main-mathematics-trigonometric-functions-and-equations-usbvrda1ujnoyl82' }, { name: 'Area Under Curve', link: 'https://questions.examside.com/past-years/jee/question/plet-f1-infty-rightarrow-mathbfr-be-a-function-jee-main-mathematics-trigonometric-functions-and-equations-mjjameotpndyf6dg' },
+                { name: 'Differential Equations', link: 'https://questions.examside.com/past-years/jee/question/plet-yyx-be-the-solution-of-the-differential-equation-jee-main-mathematics-trigonometric-functions-and-equations-syxxqiwboxzcjos8' }, { name: 'Statistics', link: 'https://questions.examside.com/past-years/jee/question/pa-set-of-four-observations-has-mean-1-and-variance-13-an-jee-main-mathematics-trigonometric-functions-and-equations-40nkpnw68p86neg4' },
+                { name: 'Circles', link: 'https://questions.examside.com/past-years/jee/question/pconsider-the-circle-c--x2y2-6-x-8-y-110-let-a-var-jee-main-mathematics-trigonometric-functions-and-equations-n0osnsmossno5nb8' }
+                
+            ],
+            chm: [
+                { name: 'Mole Concept', link: 'https://questions.examside.com/past-years/jee/question/p-text--match-list-i-with-list-ii--p-style-jee-main-chemistry-some-basic-concepts-of-chemistry-murxosgapirprdla' }, { name: 'Atomic Structure', link: 'https://questions.examside.com/past-years/jee/question/pconsider-two-radiations-of-wavelengthsp-ol-lip-jee-main-chemistry-some-basic-concepts-of-chemistry-esrm81g52rndt2qs' },
+                { name: 'Periodic Table', link: 'https://questions.examside.com/past-years/jee/question/p-text--match-list-i-with-list-ii--p-style-jee-main-chemistry-some-basic-concepts-of-chemistry-a0annp9idlny63ok' }, { name: 'Chemical Bonding', link: 'https://questions.examside.com/past-years/jee/question/pbromine-trifluoride-autoionizes-to-form-mathrmbrf2-jee-main-chemistry-some-basic-concepts-of-chemistry-cgzrxim8d9nfjcpq' },
+                { name: 'GOC', link: 'https://questions.examside.com/past-years/jee/question/pgiven-below-are-two-statements-p-pstatement-i-vapo-jee-main-chemistry-some-basic-concepts-of-chemistry-fwiz5yinjybrfo5j' }, { name: 'Hydrocarbons', link: 'https://questions.examside.com/past-years/jee/question/p-text--the-major-product-of-which-of-the-following-re-jee-main-chemistry-some-basic-concepts-of-chemistry-j4w3vncswbp1fals' },
+                { name: 'Aldehydes, K & CA', link: 'https://questions.examside.com/past-years/jee/question/p-text--consider-the-following-reaction--p-p-jee-main-chemistry-some-basic-concepts-of-chemistry-hwcjo7hsopzytruc' }, { name: 'Biomolecules', link: 'https://questions.examside.com/past-years/jee/question/pthe-incorrect-statement-from-the-following-with-respect-t-jee-main-chemistry-some-basic-concepts-of-chemistry-da6jlvvwmw42mrsg' },
+                { name: 'Chemical Kinetics', link: 'https://questions.examside.com/past-years/jee/question/pgiven-below-are-two-statements-p-p-mathrmr83-jee-main-chemistry-some-basic-concepts-of-chemistry-op287jv3shrfnpul' }, { name: 'Solutions', link: 'https://questions.examside.com/past-years/jee/question/pgiven-below-are-two-statements-p-pgiven--molar-mas-jee-main-chemistry-some-basic-concepts-of-chemistry-nf6gnrzwjig2zwd1' },
+                { name: 'Electrochemistry', link: 'https://questions.examside.com/past-years/jee/question/pgiven-at-298-k-p-p-beginaligned--mathrme-jee-main-chemistry-some-basic-concepts-of-chemistry-zjaa3zvmu5zdehyi' }, { name: 'Coordination Comp.', link: 'https://questions.examside.com/past-years/jee/question/pnumber-of-paramagnetic-complexes-among-the-following-is--jee-main-chemistry-some-basic-concepts-of-chemistry-agpm2juxwjiahsvk' },
+                { name: 'd & f Block', link: 'https://questions.examside.com/past-years/jee/question/pgiven-below-are-two-statements-p-pstatement-i-the-jee-main-chemistry-some-basic-concepts-of-chemistry-ixlzf6unstfmlbis' }
+            ]
+        };
+
+        function renderVault() {
+            for (const subject in vaultData) {
+                const container = document.getElementById(`body-${subject}`);
+                container.innerHTML = vaultData[subject].map(item => `
+                    <div class="chapter-node">
+                        <span class="chapter-name">${item.name}</span>
+                        <a href="${item.link}" target="_blank" class="btn-access">Access PYQs</a>
+                    </div>
+                `).join('');
+            }
+        }
+
+        renderVault();
+        // --- 1. Toggle State Logic ---
+                function toggleVaultChapter(chapterName) {
+                    // Using a unique key so it doesn't interfere with Curriculum
+                    let vaultState = JSON.parse(localStorage.getItem('scholar_vault_status')) || {};
+                    
+                    // Toggle boolean
+                    vaultState[chapterName] = !vaultState[chapterName];
+                    
+                    localStorage.setItem('scholar_vault_status', JSON.stringify(vaultState));
+                    renderVault();
+                }
+        
+                // --- 2. Enhanced Render Logic ---
+                function renderVault() {
+                    let vaultState = JSON.parse(localStorage.getItem('scholar_vault_status')) || {};
+                    let counts = { phy: 0, mth: 0, chm: 0, total: 0 };
+                    
+                    // Clear all containers
+                    const containers = {
+                        phy: document.getElementById('body-phy'),
+                        mth: document.getElementById('body-mth'),
+                        chm: document.getElementById('body-chm'),
+                        completed: document.getElementById('body-completed')
+                    };
+                    
+                    Object.values(containers).forEach(c => c.innerHTML = '');
+                    let completedHTML = '';
+        
+                    for (const subject in vaultData) {
+                        vaultData[subject].forEach(item => {
+                            const isDone = vaultState[item.name] || false;
+                            
+                            const nodeHTML = `
+                                <div class="chapter-node">
+                                    <span class="chapter-name">${item.name}</span>
+                                    <div class="vault-controls">
+                                        <a href="${item.link}" target="_blank" class="btn-access">Access PYQs</a>
+                                        <div class="tick-container ${isDone ? 'checked' : ''}" 
+                                             onclick="toggleVaultChapter('${item.name}')" 
+                                             title="Mark as Solved">
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+        
+                            if (isDone) {
+                                completedHTML += nodeHTML;
+                                counts[subject]++;
+                                counts.total++;
+                            } else {
+                                containers[subject].innerHTML += nodeHTML;
+                            }
+                        });
+                    }
+        
+                    // Inject Completed list
+                    containers.completed.innerHTML = completedHTML || '<p style="color:var(--text-muted); font-size:0.8rem; font-style:italic;">No archives resolved yet.</p>';
+                    
+                    // Update UI Counters
+                    document.getElementById('count-phy').innerText = `${counts.phy} Completed`;
+                    document.getElementById('count-mth').innerText = `${counts.mth} Completed`;
+                    document.getElementById('count-chm').innerText = `${counts.chm} Completed`;
+                    document.getElementById('count-total-vault').innerText = `${counts.total} Completed`;
+                }
+        
+                function toggleAccordion(id) {
+                    const body = document.getElementById(id);
+                    body.classList.toggle('open');
+                }
+        
+                renderVault();
+    </script>
+</body>
+</html>

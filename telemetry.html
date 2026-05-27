@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telemetry | ScholarJEE</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0a0a0a">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('ScholarJEE Engine Online', reg.scope))
+                    .catch(err => console.error('Engine Failure', err));
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --card-dark: #141414;
+            --panel-bg: #0f0f0f;
+            --text-light: #f5f5f5;
+            --text-muted: #666666;
+            --accent-green: #00ff41;
+            --green-glow: rgba(0, 255, 65, 0.15);
+            
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Montserrat', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            padding-bottom: 5rem;
+        }
+
+        /* Navigation Header */
+        header {
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+        .logo span { color: var(--accent-green); }
+
+        nav ul { display: flex; list-style: none; gap: 2rem; }
+        nav a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        nav a:hover, .active-nav { color: var(--accent-green); }
+
+        .container {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+        }
+
+        .page-intro { margin-bottom: 3rem; }
+        .page-intro p {
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.75rem;
+            color: var(--accent-green);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .page-intro h1 { font-family: var(--font-serif); font-size: 3rem; font-weight: 400; }
+
+        /* Input Form */
+        .form-panel {
+            background: var(--card-dark);
+            padding: 2.5rem;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-top: 2px solid var(--accent-green);
+            position: sticky;
+            top: 120px;
+        }
+
+        .form-label {
+            display: block;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.6rem;
+        }
+
+        .form-control {
+            width: 100%;
+            background: var(--panel-bg);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-light);
+            padding: 12px 15px;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            transition: 0.3s;
+            outline: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control:focus { border-color: var(--accent-green); box-shadow: 0 0 10px var(--green-glow); }
+
+        .btn-submit {
+            width: 100%;
+            background: rgba(0, 255, 65, 0.05);
+            border: 1px solid var(--accent-green);
+            color: var(--accent-green);
+            padding: 18px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: 0.4s;
+            font-weight: 700;
+        }
+
+        .btn-submit:hover { background: var(--accent-green); color: #000; box-shadow: 0 0 20px var(--green-glow); }
+
+        /* The Chart Panel */
+        .chart-container {
+            background: var(--card-dark);
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 2rem;
+            position: relative;
+            height: 400px; /* Fixed height for Chart.js */
+        }
+
+        /* Analytics HUD */
+        .analytics-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-box {
+            background: var(--panel-bg);
+            border: 1px dashed rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            color: var(--accent-green);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Test Ledger */
+        .ledger-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .test-card {
+            background: var(--panel-bg);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .test-card:hover { border-color: rgba(255,255,255,0.2); }
+
+        .test-score { font-family: var(--font-mono); font-size: 1.5rem; color: var(--text-light); margin-bottom: 0.5rem; }
+        .test-name { font-size: 0.8rem; color: #aaa; margin-bottom: 0.2rem; }
+        .test-date { font-family: var(--font-mono); font-size: 0.6rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        .btn-delete {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: transparent;
+            border: none;
+            color: #444;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-delete:hover { color: #ff4757; }
+
+        @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .chart-container { height: 300px; } }
+    
+        /* --- MOBILE OPTIMIZATION --- */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    nav > ul {
+        gap: 1rem;
+    }
+    nav > ul > li > a {
+        font-size: 0.7rem;
+    }
+    .page-header h1 {
+        font-size: 2.2rem;
+    }
+    .layout-container {
+        flex-direction: column; /* Stacks sidebar on top of content */
+        padding: 1.5rem;
+    }
+    .sidebar {
+        width: 100%;
+        position: static; /* Removes the sticky effect for mobile */
+    }
+    .widget-grid {
+        grid-template-columns: 1fr; /* Single column widgets */
+    }
+    .task-grid {
+        grid-template-columns: 1fr; /* Single column cards */
+    }
+    .day-card textarea {
+        min-height: 150px;
+    }
+}
+    
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">Scholar<span>JEE</span></a>
+        <nav>
+            <ul>
+                <li><a href="index.html">Command</a></li>
+                <li><a href="curriculum.html">Curriculum</a></li>
+                <li><a href="debrief.html">Debrief</a></li>
+                <li><a href="telemetry.html" class="active-nav">Telemetry</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <aside>
+            <div class="page-intro">
+                <p>Performance Tracking</p>
+                <h1>Telemetry</h1>
+            </div>
+
+            <div class="form-panel">
+                <form id="telemetryForm">
+                    <label class="form-label">Mock Test Identifier</label>
+                    <input type="text" id="testName" class="form-control" placeholder="e.g., AITS-1, NTA Abhyas 4" required>
+
+                    <label class="form-label">Total Score (Out of 300)</label>
+                    <input type="number" id="testScore" class="form-control" placeholder="0 - 300" min="0" max="300" required>
+
+                    <label class="form-label">Date of Execution</label>
+                    <input type="date" id="testDate" class="form-control" required>
+
+                    <button type="submit" class="btn-submit">Initialize Data</button>
+                </form>
+            </div>
+        </aside>
+
+        <main>
+            <div class="analytics-bar">
+                <div class="stat-box">
+                    <div class="stat-num" id="stat-avg">0</div>
+                    <div class="stat-label">Average Score</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-num" id="stat-max">0</div>
+                    <div class="stat-label">Peak Score</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-num" id="stat-count" style="color: var(--text-light);">0</div>
+                    <div class="stat-label">Deployments</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="telemetryChart"></canvas>
+            </div>
+
+            <div class="ledger-container" id="ledgerGrid">
+                </div>
+        </main>
+    </div>
+
+    <script>
+        // Set today's date in the date picker by default
+        document.getElementById('testDate').valueAsDate = new Date();
+
+        let telemetryChart = null; // Hold the chart instance
+
+        function loadTelemetry() {
+            const data = JSON.parse(localStorage.getItem('scholar_telemetry')) || [];
+            
+            // 1. Sort data chronologically for the chart
+            data.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            // 2. Calculate Stats
+            const count = data.length;
+            const max = count > 0 ? Math.max(...data.map(d => d.score)) : 0;
+            const sum = data.reduce((acc, curr) => acc + parseInt(curr.score), 0);
+            const avg = count > 0 ? Math.round(sum / count) : 0;
+
+            document.getElementById('stat-avg').innerText = avg;
+            document.getElementById('stat-max').innerText = max;
+            document.getElementById('stat-count').innerText = count;
+
+            // 3. Render Ledger (Newest First)
+            const ledger = document.getElementById('ledgerGrid');
+            const reversedData = [...data].reverse();
+            
+            if (count === 0) {
+                ledger.innerHTML = '<p style="color:var(--text-muted); font-size:0.85rem; font-family: var(--font-mono); grid-column: 1/-1;">No telemetry data logged. System awaiting input.</p>';
+            } else {
+                ledger.innerHTML = reversedData.map(d => `
+                    <div class="test-card">
+                        <button class="btn-delete" onclick="deleteTest(${d.id})">×</button>
+                        <div class="test-score">${d.score}<span style="font-size:0.8rem; color:#666;">/300</span></div>
+                        <div class="test-name">${d.name}</div>
+                        <div class="test-date">${new Date(d.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</div>
+                    </div>
+                `).join('');
+            }
+
+            // 4. Render Chart
+            renderChart(data);
+        }
+
+        function renderChart(data) {
+            const ctx = document.getElementById('telemetryChart').getContext('2d');
+            
+            const labels = data.map(d => d.name);
+            const scores = data.map(d => d.score);
+
+            // Destroy previous chart instance if it exists to prevent glitching
+            if (telemetryChart) {
+                telemetryChart.destroy();
+            }
+
+            telemetryChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Score Trajectory',
+                        data: scores,
+                        borderColor: '#00ff41',
+                        backgroundColor: 'rgba(0, 255, 65, 0.1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#0a0a0a',
+                        pointBorderColor: '#00ff41',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6,
+                        fill: true,
+                        tension: 0.3 // Smooth curves
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#141414',
+                            titleFont: { family: 'Space Mono', size: 12 },
+                            bodyFont: { family: 'Space Mono', size: 14 },
+                            borderColor: '#333',
+                            borderWidth: 1,
+                            displayColors: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 0,
+                            max: 300,
+                            grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                            ticks: { color: '#666', font: { family: 'Space Mono' }, stepSize: 50 }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#666', font: { family: 'Space Mono', size: 10 } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Form Submit Handler
+        document.getElementById('telemetryForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newTest = {
+                id: Date.now(),
+                name: document.getElementById('testName').value,
+                score: parseInt(document.getElementById('testScore').value),
+                date: document.getElementById('testDate').value
+            };
+
+            const data = JSON.parse(localStorage.getItem('scholar_telemetry')) || [];
+            data.push(newTest);
+            localStorage.setItem('scholar_telemetry', JSON.stringify(data));
+            
+            this.reset();
+            document.getElementById('testDate').valueAsDate = new Date(); // Reset date to today
+            loadTelemetry();
+        });
+
+        // Delete Handler
+        function deleteTest(id) {
+            let data = JSON.parse(localStorage.getItem('scholar_telemetry')) || [];
+            data = data.filter(d => d.id !== id);
+            localStorage.setItem('scholar_telemetry', JSON.stringify(data));
+            loadTelemetry();
+        }
+
+        // Initialize
+        loadTelemetry();
+    </script>
+</body>
+</html>

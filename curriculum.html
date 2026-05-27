@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Curriculum | ScholarJEE</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0a0a0a">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('ScholarJEE Engine Online', reg.scope))
+                    .catch(err => console.error('Engine Failure', err));
+            });
+        }
+    </script>
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --card-dark: #141414;
+            --panel-bg: #0f0f0f;
+            --text-light: #f5f5f5;
+            --text-muted: #666666;
+            --accent-green: #00ff41;
+            --active-glow: rgba(0, 255, 65, 0.4);
+            --mastered-bg: rgba(0, 255, 65, 0.05);
+            
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Montserrat', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            padding-bottom: 5rem;
+        }
+
+        /* Navigation Header */
+        header {
+            padding: 2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+        .logo span { color: var(--accent-green); }
+
+        nav ul { display: flex; list-style: none; gap: 2rem; }
+        nav a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        nav a:hover, .active-nav { color: var(--accent-green); }
+
+        .container {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 5%;
+        }
+
+        .page-intro { margin-bottom: 3rem; }
+        .page-intro p {
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.75rem;
+            color: var(--accent-green);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .page-intro h1 {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            font-weight: 400;
+        }
+
+        /* Accordion (Dropdowns) */
+        .accordion-container {
+            margin-bottom: 4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .accordion-item {
+            background: var(--card-dark);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            border-left: 3px solid transparent;
+            transition: 0.3s;
+        }
+
+        #acc-phy { border-left-color: #00a8ff; }
+        #acc-mth { border-left-color: #e84118; }
+        #acc-chm { border-left-color: #fbc531; }
+
+        .accordion-header:hover { background: #1a1a1a; }
+        
+        .subject-title {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+        }
+        
+        .subject-count {
+            font-family: var(--font-sans);
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .accordion-body {
+            display: none; /* Hidden by default */
+            background: var(--panel-bg);
+            padding: 1.5rem 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.02);
+        }
+
+        .accordion-body.open {
+            display: grid;
+        }
+
+        /* Chapter Items */
+        .chapter-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-dark);
+            padding: 0.8rem 1rem;
+            border: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.85rem;
+            color: #ccc;
+            transition: 0.2s;
+        }
+
+        .chapter-card:hover { border-color: rgba(255,255,255,0.2); color: var(--text-light); }
+
+        .btn-action {
+            background: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--text-muted);
+            padding: 4px 8px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            
+            /* The New Aesthetic Additions */
+            font-family: 'Space mono', monospace; /* Or 'Space Mono' */
+            font-weight: 400; /* Keeps it thin and sharp */
+            letter-spacing: 2px; /* Increases tracking for that elite feel */
+        }
+
+        .btn-action:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            box-shadow: 0 0 8px rgba(0, 255, 65, 0.2);
+        }
+
+        /* Archives Layout */
+        .archives-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .archive-box {
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: var(--card-dark);
+        }
+
+        .archive-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Active Specific */
+        .active-archive { border-color: rgba(0, 255, 65, 0.5); box-shadow: 0 0 20px rgba(0, 255, 65, 0.05); }
+        .active-archive .archive-title { color: var(--text-light); }
+        .active-archive .archive-title::before {
+            content: ''; display: inline-block; width: 8px; height: 8px;
+            background: var(--accent-green); border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-green);
+        }
+
+        /* Mastered Specific */
+        .mastered-archive { background: var(--mastered-bg); border-color: rgba(0, 255, 65, 0.2); }
+        .mastered-archive .archive-title { color: var(--accent-green); }
+        
+        .empty-state { color: var(--text-muted); font-size: 0.85rem; font-style: italic; }
+
+        @media (max-width: 900px) {
+            .archives-grid { grid-template-columns: 1fr; }
+        }
+    
+        /* --- MOBILE OPTIMIZATION --- */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    nav > ul {
+        gap: 1rem;
+    }
+    nav > ul > li > a {
+        font-size: 0.7rem;
+    }
+    .page-header h1 {
+        font-size: 2.2rem;
+    }
+    .layout-container {
+        flex-direction: column; /* Stacks sidebar on top of content */
+        padding: 1.5rem;
+    }
+    .sidebar {
+        width: 100%;
+        position: static; /* Removes the sticky effect for mobile */
+    }
+    .widget-grid {
+        grid-template-columns: 1fr; /* Single column widgets */
+    }
+    .task-grid {
+        grid-template-columns: 1fr; /* Single column cards */
+    }
+    .day-card textarea {
+        min-height: 150px;
+    }
+}
+    
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">Scholar<span>JEE</span></a>
+        <nav>
+            <ul>
+                <li><a href="index.html">Command</a></li>
+                <li><a href="curriculum.html" class="active-nav">Curriculum</a></li>
+                <li><a href="debrief.html">Debrief</a></li>
+                 <li><a href= "telemetry.html" >Telemetry</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="page-intro">
+            <p>Syllabus Database</p>
+            <h1>Chapter Engagement</h1>
+        </div>
+
+        <div class="accordion-container">
+            <div class="accordion-item" id="acc-phy">
+                <div class="accordion-header" onclick="toggleAccordion('body-phy')">
+                    <div class="subject-title">Physics</div>
+                    <div class="subject-count" id="count-phy">0/16 Mastered</div>
+                </div>
+                <div class="accordion-body" id="body-phy"></div>
+            </div>
+            
+            <div class="accordion-item" id="acc-mth">
+                <div class="accordion-header" onclick="toggleAccordion('body-mth')">
+                    <div class="subject-title">Mathematics</div>
+                    <div class="subject-count" id="count-mth">0/14 Mastered</div>
+                </div>
+                <div class="accordion-body" id="body-mth"></div>
+            </div>
+
+            <div class="accordion-item" id="acc-chm">
+                <div class="accordion-header" onclick="toggleAccordion('body-chm')">
+                    <div class="subject-title">Chemistry</div>
+                    <div class="subject-count" id="count-chm">0/15 Mastered</div>
+                </div>
+                <div class="accordion-body" id="body-chm"></div>
+            </div>
+        </div>
+
+        <div class="archives-grid">
+            <div class="archive-box active-archive">
+                <div class="archive-title">Active Targets</div>
+                <div style="margin-bottom: 1rem; font-size: 0.8rem; color: var(--text-muted);">Chapters currently engaged for study.</div>
+                <div id="list-active" style="display: flex; flex-direction: column; gap: 0.5rem;"></div>
+            </div>
+
+           <div class="accordion-item mastered-archive" style="border-left: 3px solid var(--accent-green);">
+                            <div class="accordion-header" onclick="toggleAccordion('list-mastered')">
+                                <div class="archive-title" style="margin-bottom: 0;">Mastered Archives</div>
+                                <div class="subject-count" id="count-mastered-total" style="color: var(--accent-green);">0 Mastered</div>
+                            </div>
+                            <div class="accordion-body" id="list-mastered"></div>
+                        </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. UI LOGIC (Dropdowns) ---
+        function toggleAccordion(id) {
+            const body = document.getElementById(id);
+            body.classList.toggle('open');
+        }
+
+        // --- 2. DATA (45 Chapters) ---
+        const syllabus = {
+            phy: [
+                { id: 'p1', name: 'Units & Dimensions' }, { id: 'p2', name: '1D Kinematics' }, { id: 'p3', name: '2D Kinematics' },
+                { id: 'p4', name: 'Work, Power, Energy' }, { id: 'p5', name: 'Gravitation' }, { id: 'p6', name: 'Electrostatics' },
+                { id: 'p7', name: 'Capacitance' }, { id: 'p8', name: 'Current Electricity' }, { id: 'p9', name: 'Moving Charges & Magnetism' },
+                { id: 'p10', name: 'EMI' }, { id: 'p11', name: 'Alternating Current' }, { id: 'p12', name: 'EM Waves' },
+                { id: 'p13', name: 'Ray Optics' }, { id: 'p14', name: 'Thermodynamics & KTG' }, { id: 'p15', name: 'Modern Physics' },
+                { id: 'p16', name: 'Semiconductors' }
+            ],
+            mth: [
+                { id: 'm1', name: 'Relations & Functions' }, { id: 'm2', name: 'Sequence & Series' }, { id: 'm3', name: 'Matrices' },
+                { id: 'm4', name: 'Determinants' }, { id: 'm5', name: 'Binomial Theorem' }, { id: 'm6', name: 'Permutations & Comb.' },
+                { id: 'm7', name: 'Straight Lines' }, { id: 'm8', name: 'Conic Sections' }, { id: 'm9', name: 'Vectors' },
+                { id: 'm10', name: '3D Geometry' }, { id: 'm11', name: 'Definite Integration' }, { id: 'm12', name: 'Area Under Curve' },
+                { id: 'm13', name: 'Differential Equations' }, { id: 'm14', name: 'Statistics' }
+            ],
+            chm: [
+                { id: 'c1', name: 'Mole Concept' }, { id: 'c2', name: 'Atomic Structure' }, { id: 'c3', name: 'Periodic Table' },
+                { id: 'c4', name: 'Chemical Bonding' }, { id: 'c5', name: 'GOC' }, { id: 'c6', name: 'Hydrocarbons' },
+                { id: 'c7', name: 'Aldehydes' }, { id: 'c8', name: 'Ketones' }, { id: 'c9', name: 'Carboxylic Acids' },
+                { id: 'c10', name: 'Biomolecules' }, { id: 'c11', name: 'Chemical Kinetics' }, { id: 'c12', name: 'Solutions' },
+                { id: 'c13', name: 'Electrochemistry' }, { id: 'c14', name: 'Coordination Comp.' }, { id: 'c15', name: 'd & f Block' }
+            ]
+        };
+
+        // --- 3. THE ENGINE ---
+        // State map: 0 = Pending (Database), 1 = Active (Target), 2 = Mastered (Archive)
+        
+        function loadCurriculum() {
+            let state = JSON.parse(localStorage.getItem('jee_chapter_state_v2')) || {};
+            
+            let htmlState = { phy: '', mth: '', chm: '', active: '', mastered: '' };
+            let counts = { phy: 0, mth: 0, chm: 0, totalMastered: 0 };
+
+            for (const subject in syllabus) {
+                syllabus[subject].forEach(chapter => {
+                    const chapterStatus = state[chapter.id] || 0;
+
+                    if (chapterStatus === 0) {
+                        // Pending in Dropdown
+                        htmlState[subject] += `
+                            <div class="chapter-card">
+                                <span>${chapter.name}</span>
+                                <button class="btn-action" onclick="changeState('${chapter.id}', 1)">Engage</button>
+                            </div>
+                        `;
+                    } else if (chapterStatus === 1) {
+                        // In Active Targets
+                        htmlState.active += `
+                            <div class="chapter-card" style="border-color: rgba(0, 255, 65, 0.3);">
+                                <span>${chapter.name}</span>
+                                <div>
+                                    <button class="btn-action" style="border-color: #ff4757; color: #ff4757;" onclick="changeState('${chapter.id}', 0)">Drop</button>
+                                    <button class="btn-action" style="background: rgba(0,255,65,0.1); color: var(--accent-green);" onclick="changeState('${chapter.id}', 2)">Master</button>
+                                </div>
+                            </div>
+                        `;
+                    } else if (chapterStatus === 2) {
+                        // In Mastered Archives
+                        counts[subject]++;
+                        counts.totalMastered++;
+                        htmlState.mastered += `
+                            <div class="chapter-card" style="opacity: 0.6; text-decoration: line-through;">
+                                <span>${chapter.name}</span>
+                                <button class="btn-action" onclick="changeState('${chapter.id}', 0)">Revert</button>
+                            </div>
+                        `;
+                    }
+                });
+            }
+
+            // Update DOM Dropdowns
+            document.getElementById('body-phy').innerHTML = htmlState.phy || '<div class="empty-state">All chapters engaged or mastered.</div>';
+            document.getElementById('body-mth').innerHTML = htmlState.mth || '<div class="empty-state">All chapters engaged or mastered.</div>';
+            document.getElementById('body-chm').innerHTML = htmlState.chm || '<div class="empty-state">All chapters engaged or mastered.</div>';
+            // Update Headers
+            document.getElementById('count-phy').innerText = `${counts.phy}/16 Mastered`;
+            document.getElementById('count-mth').innerText = `${counts.mth}/14 Mastered`;
+            document.getElementById('count-chm').innerText = `${counts.chm}/15 Mastered`;
+            
+            // ADD THIS LINE FOR THE NEW MASTERED DROPDOWN:
+            document.getElementById('count-mastered-total').innerText = `${counts.totalMastered} Mastered`;
+            
+            // Update Headers
+            document.getElementById('count-phy').innerText = `${counts.phy}/16 Mastered`;
+            document.getElementById('count-mth').innerText = `${counts.mth}/14 Mastered`;
+            document.getElementById('count-chm').innerText = `${counts.chm}/15 Mastered`;
+            
+            // Update Archives
+            document.getElementById('list-active').innerHTML = htmlState.active || '<div class="empty-state">No active targets. engage a chapter from the database.</div>';
+            document.getElementById('list-mastered').innerHTML = htmlState.mastered || '<div class="empty-state">No chapters mastered yet.</div>';
+
+            // Sync with index.html !
+            localStorage.setItem('jee_mastered_chapters', counts.totalMastered);
+        }
+
+        // --- 4. STATE TRANSITIONS ---
+        function changeState(id, newState) {
+            let state = JSON.parse(localStorage.getItem('jee_chapter_state_v2')) || {};
+            state[id] = newState;
+            localStorage.setItem('jee_chapter_state_v2', JSON.stringify(state));
+            loadCurriculum();
+        }
+
+        // Initialize on load
+        loadCurriculum();
+    </script>
+</body>
+</html>
