@@ -234,70 +234,40 @@
         }
         footer p span { color: var(--text-muted);
 
-/* =========================================
-           MOBILE OPTIMIZATION PATCH (< 600px)
-           ========================================= */
-        @media (max-width: 600px) {
-            /* 1. Global Header & Navigation Stacking */
-            header { 
-                flex-direction: column; 
-                gap: 1rem; 
-                padding: 1.5rem 5%; 
-            }
-            nav ul { 
-                flex-wrap: wrap; 
-                justify-content: center; 
-                gap: 1rem; 
-            }
-            .container { 
-                margin: 2rem auto; 
-                gap: 2rem; 
-            }
-
-            /* 2. Massive Typography Scaling */
-            .page-intro h1 { font-size: 2.2rem !important; }
-            .timer-display { font-size: 2.2rem !important; }
-            .tracker-number { font-size: 3rem !important; }
-            
-            /* 3. Card & Panel Compression */
-            .resource-card { padding: 1.5rem; }
-            .form-panel, .chart-container, .archive-box { padding: 1.5rem; }
-            
-            /* 4. Curriculum / Vault Accordions */
-            .accordion-header { 
-                padding: 1.2rem; 
-                flex-direction: column; 
-                align-items: flex-start; 
-                gap: 0.5rem; 
-            }
-            .accordion-body { padding: 1rem; }
-            .chapter-node { flex-direction: column; align-items: flex-start; gap: 10px; }
-            .vault-controls { width: 100%; justify-content: space-between; }
-            
-            /* 5. Vault Specific Overlap Fixes */
-            .back-link { top: 1.5rem; left: 5%; font-size: 0.65rem; }
-            .vault-logo { top: 1.2rem; right: 5%; font-size: 1.2rem; }
-            .vault-logo span { display: inline-block; } 
-            
-            /* 6. Telemetry Analytics HUD */
-            .analytics-bar { 
-                grid-template-columns: 1fr; /* Stacks the 3 stats vertically */
-                gap: 0.5rem; 
-            }
-            .stat-box { padding: 1rem; }
-            
-            /* 7. Debrief Filter & Logs */
-            .filter-hud { grid-template-columns: 1fr; gap: 10px; }
-            .log-entry { padding: 1.5rem; }
-            .log-meta { flex-wrap: wrap; gap: 10px; }
-            .btn-delete { top: 10px; right: 10px; font-size: 0.55rem; }
-        }
-        
-        /* Extra fix for extremely small screens (e.g., iPhone SE) */
-        @media (max-width: 380px) {
-            .page-intro h1 { font-size: 1.8rem !important; }
-            .timer-display { font-size: 1.8rem !important; }
-        }
+        /* --- MOBILE OPTIMIZATION --- */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    nav > ul {
+        gap: 1rem;
+    }
+    nav > ul > li > a {
+        font-size: 0.7rem;
+    }
+    .page-header h1 {
+        font-size: 2.2rem;
+    }
+    .layout-container {
+        flex-direction: column; /* Stacks sidebar on top of content */
+        padding: 1.5rem;
+    }
+    .sidebar {
+        width: 100%;
+        position: static; /* Removes the sticky effect for mobile */
+    }
+    .widget-grid {
+        grid-template-columns: 1fr; /* Single column widgets */
+    }
+    .task-grid {
+        grid-template-columns: 1fr; /* Single column cards */
+    }
+    .day-card textarea {
+        min-height: 150px;
+    }
+}
     </style>
 </head>
 <body>
