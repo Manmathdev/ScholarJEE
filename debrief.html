@@ -5,38 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Debrief | ScholarJEE</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0a0a0a">
+    <meta name="theme-color" content="#1a1209">
     <link rel="apple-touch-icon" href="icon-192.png">
 
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('ScholarJEE Engine Online', reg.scope))
-                    .catch(err => console.error('Engine Failure', err));
-            });
-        }
-    </script>
+         if ('serviceWorker' in navigator) {
+             window.addEventListener('load', () => {
+                 navigator.serviceWorker.register('sw.js')
+                     .then(reg => console.log('ScholarJEE Engine Online', reg.scope))
+                     .catch(err => console.error('Engine Failure', err));
+             });
+         }
+     </script>
     
     <style>
         :root {
-            --bg-dark: #0a0a0a;
-            --card-dark: #141414;
-            --panel-bg: #0f0f0f;
-            --text-light: #f5f5f5;
-            --text-muted: #666666;
-            --accent-green: #00ff41;
-            --green-glow: rgba(0, 255, 65, 0.15);
-            --error-red: #ff4757;
-            
+            --bg-dark:      #1a1209;
+            --card-dark:    #2c2318;
+            --panel-bg:     #211a10;
+            --text-light:   #f2ede6;
+            --text-muted:   #a89880;
+            --accent-green: #c8763a;
+            --active-glow:  rgba(200, 118, 58, 0.4);
+            --mastered-bg:  rgba(200, 118, 58, 0.05);
+            --green-glow:   rgba(200, 118, 58, 0.15);
+            --error-red:    #c0392b;
+
             --font-serif: 'Playfair Display', serif;
-            --font-sans: 'Montserrat', sans-serif;
-            --font-mono: 'Space Mono', monospace;
+            --font-sans:  'Montserrat', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -46,21 +48,20 @@
             color: var(--text-light);
             font-family: var(--font-sans);
             line-height: 1.6;
-            padding-bottom: 5rem;
         }
 
-        /* Navigation Header */
+        /* ── Navigation Header ── */
         header {
-            padding: 2rem 5%;
+            padding: 1.6rem 6%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(10, 10, 10, 0.8);
+            background: rgba(26, 18, 9, 0.85);
             backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
             z-index: 1000;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(242, 237, 230, 0.06);
         }
 
         .logo {
@@ -72,22 +73,23 @@
         }
         .logo span { color: var(--accent-green); }
 
-        nav ul { display: flex; list-style: none; gap: 2rem; }
+        nav ul { display: flex; list-style: none; gap: 2.2rem; }
         nav a {
             text-decoration: none;
             color: var(--text-muted);
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             font-weight: 500;
-            transition: 0.3s;
+            transition: color 0.3s;
         }
         nav a:hover, .active-nav { color: var(--accent-green); }
 
+        /* ── Main Layout ── */
         .container {
             max-width: 1200px;
-            margin: 4rem auto;
-            padding: 0 5%;
+            margin: 4.5rem auto;
+            padding: 0 6%;
             display: grid;
             grid-template-columns: 1fr 1.5fr;
             gap: 4rem;
@@ -97,72 +99,92 @@
         .page-intro p {
             text-transform: uppercase;
             letter-spacing: 3px;
-            font-size: 0.75rem;
+            font-size: 0.74rem;
             color: var(--accent-green);
             font-weight: 600;
             margin-bottom: 0.5rem;
         }
-        .page-intro h1 { font-family: var(--font-serif); font-size: 3rem; font-weight: 400; }
+        .page-intro h1 {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            font-weight: 400;
+            color: var(--text-light);
+        }
 
-        /* The Input Matrix */
+        /* ── Form Panel ── */
         .form-panel {
             background: var(--card-dark);
-            padding: 2.5rem;
-            border: 1px solid rgba(255,255,255,0.05);
+            padding: 2.5rem 2.8rem;
+            border: 1px solid rgba(242, 237, 230, 0.06);
             border-top: 2px solid var(--accent-green);
+            border-radius: 16px;
             height: fit-content;
             position: sticky;
-            top: 120px;
+            top: 110px;
         }
 
         .form-label {
             display: block;
-            font-family: var(--font-mono);
+            font-family: var(--font-sans);
             font-size: 0.7rem;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 0.6rem;
+            font-weight: 600;
         }
 
         .form-control {
             width: 100%;
             background: var(--panel-bg);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(242, 237, 230, 0.08);
             color: var(--text-light);
             padding: 12px 15px;
             font-family: var(--font-sans);
             font-size: 0.9rem;
-            transition: 0.3s;
+            transition: border-color 0.3s, box-shadow 0.3s;
             outline: none;
             margin-bottom: 1.5rem;
+            border-radius: 10px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
         }
 
-        .form-control:focus { border-color: var(--accent-green); box-shadow: 0 0 10px var(--green-glow); }
+        .form-control:focus {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 10px var(--green-glow);
+        }
 
         .btn-submit {
             width: 100%;
-            background: rgba(0, 255, 65, 0.05);
+            background: rgba(200, 118, 58, 0.05);
             border: 1px solid var(--accent-green);
             color: var(--accent-green);
             padding: 18px;
-            font-family: var(--font-mono);
+            font-family: var(--font-sans);
             font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 4px;
             cursor: pointer;
-            transition: 0.4s;
+            transition: background 0.4s, color 0.4s, box-shadow 0.4s;
             font-weight: 700;
             margin-top: 10px;
+            border-radius: 10px;
         }
 
-        .btn-submit:hover { background: var(--accent-green); color: #000; box-shadow: 0 0 20px var(--green-glow); }
+        .btn-submit:hover {
+            background: var(--accent-green);
+            color: var(--bg-dark);
+            box-shadow: 0 0 20px var(--green-glow);
+        }
 
-        /* The Filter HUD */
+        /* ── Filter HUD ── */
         .filter-hud {
-            background: var(--panel-bg);
-            padding: 1.5rem;
-            border: 1px solid rgba(255,255,255,0.05);
+            background: var(--card-dark);
+            padding: 1.8rem 2rem;
+            border: 1px solid rgba(242, 237, 230, 0.06);
+            border-radius: 16px;
             margin-bottom: 2rem;
             display: grid;
             grid-template-columns: 1fr 1fr 0.5fr;
@@ -170,34 +192,121 @@
             align-items: end;
         }
 
-        /* Ledger Entries */
+        /* ── Log Entries ── */
         .log-entry {
             background: var(--card-dark);
-            border: 1px solid rgba(255,255,255,0.03);
-            border-left: 3px solid #333;
-            padding: 1.5rem 2.5rem;
+            border: 1px solid rgba(242, 237, 230, 0.04);
+            border-left: 3px solid #4a3828;
+            border-radius: 16px;
+            padding: 1.8rem 2.2rem;
             position: relative;
             margin-bottom: 1.5rem;
         }
 
         .type-cf { border-left-color: var(--error-red); }
-        .type-ce { border-left-color: #fbc531; }
-        .type-ff { border-left-color: #00a8ff; }
+        .type-ce { border-left-color: #b8975a; }
+        .type-ff { border-left-color: #7c9eb5; }
         .type-tp { border-left-color: #9c88ff; }
 
-        .log-topic { font-family: var(--font-serif); font-size: 1.4rem; color: var(--text-light); margin-bottom: 0.5rem; }
-        .log-meta { font-family: var(--font-mono); font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; display: flex; gap: 20px; margin-bottom: 1.5rem; }
-        .log-tag { padding: 2px 8px; background: rgba(255,255,255,0.05); color: var(--accent-green); }
+        .log-topic {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
 
-        .log-question { background: rgba(0, 0, 0, 0.4); border-left: 2px solid #333; padding: 1.2rem; font-family: var(--font-mono); font-size: 0.8rem; color: #888; margin-bottom: 1.5rem; line-height: 1.6; }
-        .log-notes { font-size: 0.9rem; color: #ddd; border-top: 1px dashed rgba(255,255,255,0.05); padding-top: 1rem; }
+        .log-meta {
+            font-family: var(--font-sans);
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: flex;
+            gap: 20px;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
 
-        .btn-delete { position: absolute; top: 1.5rem; right: 1.5rem; background: transparent; border: none; color: #444; font-family: var(--font-mono); font-size: 0.65rem; cursor: pointer; transition: 0.3s; letter-spacing: 1px; }
+        .log-tag {
+            padding: 2px 8px;
+            background: rgba(200, 118, 58, 0.08);
+            color: var(--accent-green);
+            border-radius: 4px;
+        }
+
+        .log-question {
+            background: rgba(0, 0, 0, 0.25);
+            border-left: 2px solid rgba(242, 237, 230, 0.1);
+            padding: 1.2rem;
+            font-family: var(--font-sans);
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .log-notes {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            border-top: 1px dashed rgba(242, 237, 230, 0.07);
+            padding-top: 1rem;
+        }
+
+        .btn-delete {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: transparent;
+            border: none;
+            color: #5a4a38;
+            font-family: var(--font-sans);
+            font-size: 0.62rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
         .btn-delete:hover { color: var(--error-red); }
 
-        @media (max-width: 900px) { .container { grid-template-columns: 1fr; } .filter-hud { grid-template-columns: 1fr; } }
-        
-        /* --- MOBILE OPTIMIZATION --- */
+        /* ── Footer ── */
+        footer {
+            padding: 3.5rem 6% 2.5rem;
+            text-align: center;
+            border-top: 1px solid rgba(242, 237, 230, 0.06);
+            margin-top: 5rem;
+        }
+        footer p {
+            font-size: 0.78rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+            .container { grid-template-columns: 1fr; }
+            .filter-hud { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1.2rem 5%;
+            }
+            nav ul { gap: 1.2rem; }
+            nav a { font-size: 0.7rem; }
+            .container {
+                margin: 3rem auto;
+                padding: 0 5%;
+            }
+            .page-intro h1 { font-size: 2.2rem; }
+            .form-panel { padding: 2rem 1.8rem; }
+        }
+/* --- MOBILE OPTIMIZATION --- */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
@@ -231,7 +340,6 @@
         min-height: 150px;
     }
 }
-    
     </style>
 </head>
 <body>
@@ -243,7 +351,7 @@
                 <li><a href="index.html">Command</a></li>
                 <li><a href="curriculum.html">Curriculum</a></li>
                 <li><a href="debrief.html" class="active-nav">Debrief</a></li>
-                <li><a href="telemetry.html">Telemtry</a></li>
+                <li><a href="telemetry.html">Telemetry</a></li>
             </ul>
         </nav>
     </header>
@@ -259,7 +367,7 @@
                 <form id="debriefForm">
                     <label class="form-label">Subject</label>
                     <select id="subjectInput" class="form-control" required onchange="populateFormChapters()">
-                        <option value="" disabled selected>Select Subject...</option>
+                        <option value="" disabled selected>Select Subject</option>
                         <option value="phy">Physics</option>
                         <option value="mth">Mathematics</option>
                         <option value="chm">Chemistry</option>
@@ -275,11 +383,11 @@
 
                     <label class="form-label">Chapters</label>
                     <select id="chapterInput" class="form-control" required>
-                        <option value="" disabled selected>Awaiting Subject...</option>
+                        <option value="" disabled selected>Awaiting Subject</option>
                     </select>
 
                     <label class="form-label">Target Intel (Question)</label>
-                    <textarea id="questionInput" class="form-control" placeholder="Describe the question or reference..."></textarea>
+                    <textarea id="questionInput" class="form-control" placeholder="Describe the question or reference"></textarea>
 
                     <label class="form-label">Autopsy Notes</label>
                     <textarea id="notesInput" class="form-control" placeholder="Analysis of why it failed and the correction..."></textarea>
@@ -306,14 +414,20 @@
                         <option value="all">All Chapters</option>
                     </select>
                 </div>
-                <button class="btn-submit" style="padding:11px; margin:0;" onclick="resetFilters()">Reset</button>
+                <button class="btn-submit" style="padding:15px; margin:0;" onclick="resetFilters()">Reset</button>
             </div>
 
             <div id="logContainer"></div>
         </main>
     </div>
 
+    <footer>
+        <p>© <span id="year"></span> Scholar. All Rights Reserved. Created by Manmath.</p>
+    </footer>
+
     <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
         const syllabus = {
             phy: ["Units & Dimensions", "1D Kinematics", "2D Kinematics", "Work, Power, Energy", "Gravitation", "Electrostatics", "Capacitance", "Current Electricity", "Moving Charges & Mag.", "EMI", "Alternating Current", "EM Waves", "Ray Optics", "Thermodynamics & KTG", "Modern Physics", "Semiconductors"],
             mth: ["Relations & Functions", "Sequence & Series", "Matrices", "Determinants", "Binomial Theorem", "Permutations & Comb.", "Straight Lines", "Conic Sections", "Vectors", "3D Geometry", "Definite Integration", "Area Under Curve", "Differential Equations", "Statistics"],
@@ -360,7 +474,7 @@
             const subFilter = document.getElementById('filterSubject').value;
             const chapFilter = document.getElementById('filterChapter').value;
             const logs = JSON.parse(localStorage.getItem('scholar_logs') || '[]');
-            
+
             const filtered = logs.filter(l => {
                 const subMatch = subFilter === 'all' || l.sub === subFilter;
                 const chapMatch = chapFilter === 'all' || l.chapter === chapFilter;
@@ -369,13 +483,13 @@
 
             const container = document.getElementById('logContainer');
             if (filtered.length === 0) {
-                container.innerHTML = '<p style="color:var(--text-muted); text-align:center; padding-top:2rem; font-family: var(--font-mono); font-size: 0.85rem;">No matching incidents found in database.</p>';
+                container.innerHTML = '<p style="color:var(--text-muted); text-align:center; padding-top:2rem; font-family:var(--font-sans); font-size:0.85rem; letter-spacing:1px;">No matching incidents found in database.</p>';
                 return;
             }
 
             container.innerHTML = filtered.map(l => `
                 <div class="log-entry type-${l.type}">
-                    <button class="btn-delete" onclick="deleteLog(${l.id})">TERMINATE ENTRY</button>
+                    <button class="btn-delete" onclick="deleteLog(${l.id})">Terminate Entry</button>
                     <div class="log-topic">${l.chapter}</div>
                     <div class="log-meta">
                         <span class="log-tag">${l.sub.toUpperCase()}</span>
@@ -383,7 +497,7 @@
                         <span>// ${l.date}</span>
                     </div>
                     <div class="log-question">${l.question || 'No intel recorded.'}</div>
-                    <div class="log-notes"><strong style="color:var(--accent-green); font-family:var(--font-mono); font-size:0.7rem; letter-spacing:1px;">AUTOPSY FIX //</strong><br>${l.notes}</div>
+                    <div class="log-notes"><strong style="color:var(--accent-green); font-family:var(--font-sans); font-size:0.7rem; letter-spacing:1px; text-transform:uppercase; font-weight:700;">Autopsy Fix //</strong><br>${l.notes}</div>
                 </div>
             `).join('');
         }
@@ -401,22 +515,7 @@
             filterLogs();
         }
 
-        // Init
         filterLogs();
     </script>
-    <footer style="padding: 2rem 5%; text-align: center; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 3rem;">
-            <p style="font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-green); font-weight: 500;">
-                © <span id="year"></span> Scholar. All Rights Reserved. Created by Manmath.
-            </p>
-        </footer>
-        
-        <script>
-            document.getElementById('year').textContent = new Date().getFullYear();
-            if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.ready.then(registration => {
-    registration.update(); // Checks GitHub for a new sw.js on every load
-  });
-}
-        </script>
 </body>
 </html>
